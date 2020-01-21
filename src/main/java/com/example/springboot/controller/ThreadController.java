@@ -10,6 +10,14 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+/**
+ * ClassName
+ * Description
+ *
+ * @author tuoww
+ * DATE 2020/01/21
+ * @version V1.0
+ **/
 @RestController
 @RequestMapping("thread")
 public class ThreadController {
@@ -18,11 +26,8 @@ public class ThreadController {
     private ThreadPoolTaskExecutor taskExecutor;
 
     /**
-     * @Date:     2018/10/22
-     * @describe: 无返回值
-     * @param null :
-     * @return : null
-     * @throws:
+     *
+     * @return
      */
     @GetMapping("test")
     public String threadTest() {
