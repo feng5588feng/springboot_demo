@@ -1,0 +1,64 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: spring-demo
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://172.18.1.220:3306/ttit_access?serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8
+
+    username: root
+    password: Qwer.1234
+  data:
+    mongodb:
+      uri: mongodb://root:Qwer.1234@172.18.1.219:27017/xattit_db
+  influxdb:
+    url: http://172.18.1.219:8086
+    username: admin
+    password: admin
+    database: my_test
+    retention-policy: testrp
+    connect-timeout: 10
+    read-timeout: 30
+    write-timeout: 10
+  redis:
+    host: 172.18.1.219
+    database: 0
+    port: 6379
+    password: ''
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1ms
+        min-idle: 0
+dubbo:
+  application:
+    name: ttit-system-manager-terminal
+  registry:
+    address: zookeeper://127.0.0.1:2181
+  protocol:
+    name: dubbo
+    port: -1
+  scan:
+    base-packages: com.example.springboot.service.impl
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    og-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+logging:
+  level:
+    com.example.springboot: debug
+  file.max-size: 20MB
+  file.max-history: 60
+  file: ../log/demo.log
