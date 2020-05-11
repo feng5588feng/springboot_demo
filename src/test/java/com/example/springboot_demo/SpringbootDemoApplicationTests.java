@@ -12,6 +12,7 @@ import com.example.springboot.test.StatsThread;
 import com.example.springboot.test.ThreadPoolDemo;
 import com.example.springboot.util.HttpUtils2;
 import com.mongodb.client.MongoCollection;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.influxdb.dto.Point;
@@ -34,9 +35,33 @@ import java.util.concurrent.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SpringbootDemoApplication.class)
+@Slf4j
 class SpringbootDemoApplicationTests {
 
-    @Autowired
+    @Test
+    public void testHttpClient(){
+        TokenData data = new TokenData();
+        data.setAreaCode("addd121212");
+        data.setSerial("100");
+        data.setToken("aaaaaaaaaaaa");
+        Map<String, Object> paramMap = JSON.parseObject(JSON.toJSONString(data), new TypeReference<Map<String, Object>>() {
+        });
+
+        //url不为空，推送
+        try {
+            String url = "http://" + "172.1.1.2" + ":8888/v1/pushToken/push";
+            String response = HttpUtils2.sendPost(url, paramMap);
+            log.info("pushToken response: " + response);
+        } catch (Exception e) {
+            log.error("推送终端token服务失败", e);
+            System.out.println("12121212212");
+        }
+
+
+
+    }
+
+    /*@Autowired
     DemoService demoService;
 
     @Autowired
@@ -56,13 +81,13 @@ class SpringbootDemoApplicationTests {
 
     final static String startTime = sdf.format(new Date());
 
-    /**
+    *//**
      * IO密集型任务  = 一般为2*CPU核心数（常出现于线程中：数据库数据交互、文件上传下载、网络数据传输等等）
      * CPU密集型任务 = 一般为CPU核心数+1（常出现于线程中：复杂算法）
      * 混合型任务  = 视机器配置和复杂度自测而定
-     */
+     *//*
     private static int corePoolSize = Runtime.getRuntime().availableProcessors();
-    /**
+    *//**
      * public ThreadPoolExecutor(int corePoolSize,int maximumPoolSize,long keepAliveTime,
      *                           TimeUnit unit,BlockingQueue<Runnable> workQueue)
      * corePoolSize用于指定核心线程数量
@@ -73,7 +98,7 @@ class SpringbootDemoApplicationTests {
      * 不当的线程池大小会使得处理速度变慢，稳定性下降，并且导致内存泄露。如果配置的线程过少，则队列会持续变大，消耗过多内存。
      * 而过多的线程又会 由于频繁的上下文切换导致整个系统的速度变缓——殊途而同归。队列的长度至关重要，它必须得是有界的，这样如果线程池不堪重负了它可以暂时拒绝掉新的请求。
      * ExecutorService 默认的实现是一个无界的 LinkedBlockingQueue。
-     */
+     *//*
     private static ThreadPoolExecutor executor  = new ThreadPoolExecutor(corePoolSize, corePoolSize+1, 10l, TimeUnit.SECONDS,
             new LinkedBlockingQueue<Runnable>(500));
 
@@ -91,13 +116,13 @@ class SpringbootDemoApplicationTests {
         List<Future<Integer>> list=new ArrayList<Future<Integer>>();
 
         new Thread(() -> {
-            /*for (int i = 0; i < 10; i++) {
+            *//*for (int i = 0; i < 10; i++) {
                 Future<Integer> future=pool.submit(() -> {
                     Thread.sleep(1000);
                     return 111;
                 });
                 list.add(future);
-            }*/
+            }*//*
 
             for (int i = 0; i < 10; i++) {
                 Future<Integer>  future=pool.submit(new Callable<Integer>() {
@@ -184,10 +209,10 @@ class SpringbootDemoApplicationTests {
         sendMap.put("token", "aaaaaaaaaaaa");
         sendMap.put("access_token", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNTc2MDU3NjM0fQ.acqMPGHEhKRO1ktdHbbrD-HP9rNXyKN235LoBdgZHuU");
 
-        /*TokenData data = new TokenData();
+        *//*TokenData data = new TokenData();
         data.setAreaCode("addd121212");
         data.setSerial("100");
-        data.setToken("aaaaaaaaaaaa");*/
+        data.setToken("aaaaaaaaaaaa");*//*
 
         restTemplate.postForObject("http://localhost:8888/v1/pushToken/push", sendMap, String.class);
 
@@ -228,9 +253,9 @@ class SpringbootDemoApplicationTests {
         //List<Ssg100Config> ssg100s = mongoTemplate.findAll(Ssg100Config.class);
         //System.out.println(ssg100s.size());
 
-        /*Query query = new Query(Criteria.where("_id").is("5e1572fb41260000bc000d63"));
+        *//*Query query = new Query(Criteria.where("_id").is("5e1572fb41260000bc000d63"));
         Update update = new Update().set("mmc_load_time", new Date());
-        mongoTemplate.updateFirst(query, update, "TSG100");*/
+        mongoTemplate.updateFirst(query, update, "TSG100");*//*
 
 
         MongoCollection<Document> mongoCollection = mongoTemplate.getCollection("TSG100");
@@ -241,6 +266,6 @@ class SpringbootDemoApplicationTests {
         Date tempDate = document.getDate("mmc_load_time");
         System.out.println(tempDate);
         System.out.println("finish....");
-    }
+    }*/
 
 }

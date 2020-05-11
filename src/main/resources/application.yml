@@ -1,11 +1,17 @@
 server:
   port: 8888
+  ssl:
+    key-store: classpath:sslServer.p12
+    key-store-password: 123456
+    key-alias: sslServer
+    keyStoreType: JKS
+
 spring:
   application:
     name: spring-demo
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://172.18.1.220:3306/ttit_access?serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://172.18.1.219:3306/ttit_access?serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8
 
     username: root
     password: Qwer.1234

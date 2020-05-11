@@ -105,7 +105,7 @@ public class HttpUtils2 {
      * @param parameters  请求参数，Map类型。
      * @return 远程响应结果
      */
-    public static String sendPost(String url, Map<String, Object> parameters) {
+    public static String sendPost(String url, Map<String, Object> parameters){
         String result = "";// 返回的结果
         BufferedReader in = null;// 读取响应输入流
         PrintWriter out = null;
@@ -142,9 +142,10 @@ public class HttpUtils2 {
                 result += line;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         } finally {
             try {
+                System.out.println(33333333);
                 if (out != null) {
                     out.close();
                 }
