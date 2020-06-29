@@ -1,11 +1,5 @@
 server:
-  port: 8888
-  ssl:
-    key-store: classpath:sslServer.p12
-    key-store-password: 123456
-    key-alias: sslServer
-    keyStoreType: JKS
-
+  port: 8899
 spring:
   application:
     name: spring-demo
@@ -42,7 +36,7 @@ dubbo:
   application:
     name: ttit-system-manager-terminal
   registry:
-    address: zookeeper://127.0.0.1:2181
+    address: zookeeper://172.18.1.219:2181
   protocol:
     name: dubbo
     port: -1

@@ -1,45 +1,140 @@
 package com.example.springboot_demo;
 
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.example.springboot.SpringbootDemoApplication;
-import com.example.springboot.entity.Ssg100Config;
+import com.example.springboot.entity.Student;
+import com.example.springboot.entity.TerminalNetstat;
 import com.example.springboot.entity.TokenData;
-import com.example.springboot.service.AsyncService;
-import com.example.springboot.service.api.DemoService;
-import com.example.springboot.test.EndTask;
-import com.example.springboot.test.StatsThread;
-import com.example.springboot.test.ThreadPoolDemo;
+import com.example.springboot.service.FilterProcess;
 import com.example.springboot.util.HttpUtils2;
-import com.mongodb.client.MongoCollection;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.Document;
-import org.bson.types.ObjectId;
-import org.influxdb.dto.Point;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.influxdb.InfluxDBTemplate;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.WebSocket;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SpringbootDemoApplication.class)
 @Slf4j
-class SpringbootDemoApplicationTests {
+public class SpringbootDemoApplicationTests {
 
     @Test
-    public void testHttpClient(){
+    public void testWebSocket() throws InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        WebSocket webSocket = client.newWebSocketBuilder()
+                .buildAsync(URI.create("ws://127.0.0.1:8899/netStatusCon/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIiLCJhcmVhQ29kZSI6IjYxIiwiaXNzIjoi6ZmV6KW_IiwiaWF0IjoxNTg5NDIzMzAzfQ.lMAJ0u7U4_HFtNwjZEPiSfNEQWrhLK-TSfs2hLpoUPw"), new WebSocket.Listener() {
+
+                    @Override
+                    public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
+                        // request one more
+                        webSocket.request(1);
+
+                        // Print the message when it's available
+                        return CompletableFuture.completedFuture(data)
+                                .thenAccept(System.out::println);
+                    }
+
+                    @Override
+                    public void onOpen(WebSocket webSocket) {
+                        System.out.println("websocket opened.");
+                    }
+
+                    @Override
+                    public CompletionStage<?> onBinary(WebSocket webSocket, ByteBuffer data, boolean last) {
+                        webSocket.request(1);
+
+                        return null;
+                    }
+                    @Override
+                    public CompletionStage<?> onPing(WebSocket webSocket, ByteBuffer message) {
+                        webSocket.request(1);
+                        System.out.println("ping");
+                        System.out.println(message.asCharBuffer().toString());
+                        return null;
+                    }
+                    @Override
+                    public CompletionStage<?> onPong(WebSocket webSocket, ByteBuffer message) {
+                        webSocket.request(1);
+                        System.out.println("pong");
+                        return null;
+                    }
+                    @Override
+                    public CompletionStage<?> onClose(WebSocket webSocket, int statusCode, String reason) {
+                        System.out.println("closed, status(" + statusCode + "), cause:"+reason);
+                        webSocket.sendClose(statusCode, reason);
+                        return null;
+                    }
+                    @Override
+                    public void onError(WebSocket webSocket, Throwable error) {
+                        System.out.println("error: " + error.getLocalizedMessage());
+                        webSocket.abort();
+                    }
+
+                }).join();
+
+
+        //
+        List<TerminalNetstat> sendList = new ArrayList<>();
+        TerminalNetstat terminalNetstat = new TerminalNetstat();
+        terminalNetstat.setClientId("123123123");
+        //发送
+        String sendData = JSON.toJSONString(sendList);
+        webSocket.sendText(sendData, true);
+
+        //webSocket.sendText("hello ", false);
+        //webSocket.sendText("world ",true);
+
+        TimeUnit.SECONDS.sleep(10);
+        //webSocket.sendClose(WebSocket.NORMAL_CLOSURE, "ok").join();
+    }
+
+
+
+    @Test
+    public void test3() {
+        List<Student> list = Arrays.asList(
+                new Student("九天", "男", 5000, 18, "天秤座"),
+                new Student("十夜", "男", 4000, 16, "双鱼座"),
+                new Student("十一郎", "男", 3000, 24, "水瓶座")
+        );
+        //list.stream().takeWhile(x -> x < 50).forEach(System.out::println);
+        Stream.iterate(1, i -> i < 5, i -> i + 1).forEach(System.out::println);
+    }
+
+
+    //同步调用
+    @Test
+    public void test2() throws IOException, InterruptedException {
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder(URI.create("")).build();
+        HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
+        HttpResponse<String> response = client.send(request, handler);
+        String body = response.body();
+        System.out.println(body);
+    }
+
+
+    @Test
+    public void testHttpClient() {
         TokenData data = new TokenData();
         data.setAreaCode("addd121212");
         data.setSerial("100");
@@ -56,7 +151,6 @@ class SpringbootDemoApplicationTests {
             log.error("推送终端token服务失败", e);
             System.out.println("12121212212");
         }
-
 
 
     }
