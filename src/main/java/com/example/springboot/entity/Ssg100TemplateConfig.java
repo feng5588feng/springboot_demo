@@ -2,6 +2,7 @@ package com.example.springboot.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -22,9 +23,9 @@ public class Ssg100TemplateConfig implements Serializable {
 
     private static final long serialVersionUID = -2752333778277622666L;
 
-    @org.springframework.data.annotation.Id
-    @JSONField(serialize=false)
-    private String Id;
+    @Id
+    @JSONField(name = "_id")
+    private String id;
 
     @Field("ver")
     @JSONField(name = "ver")

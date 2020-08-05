@@ -1,5 +1,8 @@
 package com.example.springboot.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,11 +22,15 @@ import java.util.Date;
 public abstract class BaseEntity implements Serializable {
 
     /** 主键 */
+    @TableId(value = "id",type = IdType.AUTO)
     protected Long id;
 
+    @TableField(value = "create_time")
     protected Date createTime;
 
+    @TableField(value = "update_time")
     protected  Date updateTime;
 
 
 }
+

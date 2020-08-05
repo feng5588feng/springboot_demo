@@ -9,7 +9,16 @@ public class TTest {
 
     public static void main(String[] args) {
 
-        Map<String, Object> ret = new HashMap<>();
+
+        try {
+            System.out.println(222);
+            return;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            System.out.println(1111);
+        }
+        /*Map<String, Object> ret = new HashMap<>();
 
         RegisterInfo info = new RegisterInfo();
         info.setCert("1111");
@@ -21,7 +30,7 @@ public class TTest {
         }
         info.setCertId("ssssssssss");
         ret.put("new", info);
-        System.out.println(ret.toString());
+        System.out.println(ret.toString());*/
 
 
     }

@@ -57,13 +57,14 @@ public class HttpController {
 
     @GetMapping("test")
     public String threadTest() {
-        demoService.testThread();
+        demoService.testService("111");
+        /*demoService.testThread();
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-        demoService.testThread();
+        }*/
+        //demoService.testThread();
         return "success";
     }
 

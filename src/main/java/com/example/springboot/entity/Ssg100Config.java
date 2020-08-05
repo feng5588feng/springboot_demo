@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 @Data
-@Document(collection = "SSG100")
+@Document(collection = "TSG000")
 public class Ssg100Config implements Serializable {
 
     private static final long serialVersionUID = -4682210750808593947L;
@@ -45,10 +45,6 @@ public class Ssg100Config implements Serializable {
     @Field("master_man_channel")
     @JSONField(name = "master_man_channel")
     private ManChannelModule masterManChannel;
-
-    @Field("slave_man_channel")
-    @JSONField(name = "slave_man_channel")
-    private ManChannelModule slaveManChannel;
 
     @Field("ssg100_module_version")
     @JSONField(name = "ssg100_module_version")
